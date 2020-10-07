@@ -2,33 +2,19 @@
 
 ## Getting Started
 
-### Installing Dependencies
+### Dependencies
 
-#### Python 3.7
+Dependencies are listed in the `requirements.txt` file. 
+Run `pip3 install -r requirements.txt` to install them.
 
-Follow instructions to install the latest version of python for your platform in the [python docs](https://docs.python.org/3/using/unix.html#getting-and-installing-the-latest-version-of-python)
+### Tech Stack
 
-#### Virtual Enviornment
-
-We recommend working within a virtual environment whenever using Python for projects. This keeps your dependencies for each project separate and organaized. Instructions for setting up a virual enviornment for your platform can be found in the [python docs](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)
-
-#### PIP Dependencies
-
-Once you have your virtual environment setup and running, install dependencies by naviging to the `/backend` directory and running:
-
-```bash
-pip install -r requirements.txt
-```
-
-This will install all of the required packages we selected within the `requirements.txt` file.
-
-##### Key Dependencies
-
-- [Flask](http://flask.pocoo.org/)  is a lightweight backend microservices framework. Flask is required to handle requests and responses.
-
-- [SQLAlchemy](https://www.sqlalchemy.org/) is the Python SQL toolkit and ORM we'll use handle the lightweight sqlite database. You'll primarily work in app.py and can reference models.py. 
-
-- [Flask-CORS](https://flask-cors.readthedocs.io/en/latest/#) is the extension we'll use to handle cross origin requests from our frontend server. 
+* SQLAlchemy ORM
+* PostgreSQL
+* Python3 and Flask
+* Flask-Migrate
+* Flask-CORS
+* HTML, CSS, and Javascript
 
 ## Database Setup
 With Postgres running, restore a database using the trivia.psql file provided. From the backend folder in terminal run:
@@ -37,8 +23,6 @@ psql trivia < trivia.psql
 ```
 
 ## Running the server
-
-From within the `backend` directory first ensure you are working using your created virtual environment.
 
 To run the server, execute:
 
@@ -57,214 +41,220 @@ Setting the `FLASK_APP` variable to `flaskr` directs flask to use the `flaskr` d
 One note before you delve into your tasks: for each endpoint you are expected to define the endpoint and response data. The frontend will be a plentiful resource because it is set up to expect certain endpoints and response data formats already. You should feel free to specify endpoints in your own way; if you do so, make sure to update the frontend or you will get some unexpected behavior. 
 
 1. Use Flask-CORS to enable cross-domain requests and set response headers. 
-2. Create an endpoint to handle GET requests for questions, including pagination (every 10 questions). This endpoint should return a list of questions, number of total questions, current category, categories. 
-3. Create an endpoint to handle GET requests for all available categories. 
-4. Create an endpoint to DELETE question using a question ID. 
 5. Create an endpoint to POST a new question, which will require the question and answer text, category, and difficulty score. 
-6. Create a POST endpoint to get questions based on category. 
-7. Create a POST endpoint to get questions based on a search term. It should return any questions for whom the search term is a substring of the question. 
 8. Create a POST endpoint to get questions to play the quiz. This endpoint should take category and previous question parameters and return a random questions within the given category, if provided, and that is not one of the previous questions. 
 9. Create error handlers for all expected errors including 400, 404, 422 and 500. 
 
-REVIEW_COMMENT
-```
-This README is missing documentation of your endpoints. Below is an example for your endpoint to get all categories. Please use it as a reference for creating your documentation and resubmit your code. 
+## Endpoints
+### Categories
+#### `GET /categories`
 
-Endpoints
-GET '/categories'
-GET ...
-POST ...
-DELETE ...
-
-GET '/categories'
 - Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
 - Request Arguments : None
 - Returns: An object with a single key, categories, that contains a object of id: category_string key:value pairs. 
 
+#### `Response`
+```json
 { 
-    'success': True,
-    'categories': {
-                    '1' : "Science", 
-                    '2' : "Art",
-                    '3' : "Geography",
-                    '4' : "History",
-                    '5' : "Entertainment",
-                    '6' : "Sports"
+    "success": true,
+    "categories": {
+        "1" : "Science", 
+        "2" : "Art",
+        "3" : "Geography",
+        "4" : "History",
+        "5" : "Entertainment",
+        "6" : "Sports"
     }
 }
+```
 
-GET '/questions?page=1'
-- Fetches a list of dictionaries of paginated questions in which each question is an object with it's own values
-- Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
+#### `GET /questions?page=1`
+
+- Fetches a list of dictionaries of paginated questions in which each question is an object with its own values
+- Fetches a dictionary of categories in which the keys are the ids, and the values are the corresponding strings of the categories
 - Fetches the total number of questions, and current category which is set to None
-- Request Arguments : None~~~~
-- Request Query Parameters : 'page' parameter defaults to 1
+- Request Arguments : None
+- Request Query Parameters : "page" parameter defaults to 1
 - Returns: A list of objects contain key:value pairs of id, question, answer, difficulty and category
 
-
+#### `Response`
+```json5
 {
-    'success' : True,
-    'questions': [
+    "success" : true,
+    "questions": [
                     { 
-                        'id' : 1,
-                        'question' : "What is testing",
-                        'answer' : "Software testing is an investigation conducted to provide information about the quality of the software product or service under test"
-                        'category': "Programming",
-                        'difficulty': 3
+                        "id" : 1,
+                        "question" : "What is testing",
+                        "answer" : "Software testing is an investigation conducted to provide information about the quality of the software product or service under test"
+                        "category": "Programming",
+                        "difficulty": 3
                     } 
                 ]
-    'total_questions': 1,
-    'current_category' : "None"
-    'categories' : {      
-                        '1' : "Science", 
-                        '2' : "Art",
-                        '3' : "Geography",
-                        '4' : "History",
-                        '5' : "Entertainment",
-                        '6' : "Sports"
+    "total_questions": 1,
+    "current_category" : "None",
+    "categories" : {      
+                        "1" : "Science", 
+                        "2" : "Art",
+                        "3" : "Geography",
+                        "4" : "History",
+                        "5" : "Entertainment",
+                        "6" : "Sports"
                    }
 }
-
-DELETE '/questions/<int:question_id>
-- Deletes a question based on the provided variable which maps to the id of the question
-- Fetches a list of dictionaries of paginated questions in which each question is an object with it's own values
-- Request Arguments : Question id to be deleted
-- Returns: The deleted question's id, the list of questions, and the total number of questions
-       
-
-{
-    'success' : True,
-    'deleted' : 1,
-    'questions': [
-                    { 
-                        'id' : 2,
-                        'question' : "What is testing",
-                        'answer' : "Software testing is an investigation conducted to provide information about the quality of the software product or service under test"
-                        'category': "Programming",
-                        'difficulty': 3
-                    } 
-                ]
-    'total_questions': 1,
-}
+```
     
-POST '/questions'
+#### `POST /questions`
 
-- Creates a question sent by request's body
-- Fetches a list of dictionaries of paginated questions in which each question is an object with it's own values
+- Creates a question sent by request"s body
+- Fetches a list of dictionaries of paginated questions in which each question is an object with it"s own values
 - Request Arguments : None
-- Returns The created question's id, the list of questions, and the total number of questions
+- Returns The created question"s id, the list of questions, and the total number of questions
 
+#### `Response`
+```json5
 {
-    'success' : True,
-    'created' : 2,
-    'questions': [
+    "success" : true,
+    "created" : 2,
+    "questions": [
                     { 
-                        'id' : 1,
-                        'question' : "What is testing",
-                        'answer' : "Software testing is an investigation conducted to provide information about the quality of the software product or service under test"
-                        'category': "Programming",
-                        'difficulty': 3
+                        "id" : 1,
+                        "question" : "What is testing",
+                        "answer" : "Software testing is an investigation conducted to provide information about the quality of the software product or service under test"
+                        "category": "Programming",
+                        "difficulty": 3
                     } 
                     { 
-                        'id' : 2,
-                        'question' : "What is testing",
-                        'answer' : "Software testing is an investigation conducted to provide information about the quality of the software product or service under test"
-                        'category': "Programming",
-                        'difficulty': 3
+                        "id" : 2,
+                        "question" : "What is testing",
+                        "answer" : "Software testing is an investigation conducted to provide information about the quality of the software product or service under test"
+                        "category": "Programming",
+                        "difficulty": 3
                     } 
                 ]
-    'total_questions': 2,
+    "total_questions": 2,
 }
+```
 
-POST '/questions/search'
+#### `POST /questions/search`
+
 - Searches for provided search term in the form
-- Fetches a list of dictionaries of paginated questions in which each question is an object with it's own values
+- Fetches a list of dictionaries of paginated questions in which each question is an object with it"s own values
 - Request Arguments : None
 - Returns: a list of questions that contain the provided search term
 
+#### `Response`
+```json5
 {
-    'success' : True,
-    'questions': [
+    "success" : true,
+    "questions": [
                     { 
-                        'id' : 1,
-                        'question' : "What is testing",
-                        'answer' : "Software testing is an investigation conducted to provide information about the quality of the software product or service under test"
-                        'category': "Programming",
-                        'difficulty': 3
+                        "id" : 1,
+                        "question" : "What is testing",
+                        "answer" : "Software testing is an investigation conducted to provide information about the quality of the software product or service under test"
+                        "category": "Programming",
+                        "difficulty": 3
                     } 
                     { 
-                        'id' : 2,
-                        'question' : "What is testing",
-                        'answer' : "Software testing is an investigation conducted to provide information about the quality of the software product or service under test"
-                        'category': "Programming",
-                        'difficulty': 3
+                        "id" : 2,
+                        "question" : "What is testing",
+                        "answer" : "Software testing is an investigation conducted to provide information about the quality of the software product or service under test"
+                        "category": "Programming",
+                        "difficulty": 3
                     } 
                 ]
-    'total_questions': 2,
+    "total_questions": 2,
 }
+```
 
+#### `DELETE /questions/<int:question_id>`
+- Deletes a question based on the provided variable which maps to the id of the question
+- Fetches a list of dictionaries of paginated questions in which each question is an object with it"s own values
+- Request Arguments : Question id to be deleted
+- Returns: The deleted question"s id, the list of questions, and the total number of questions
+       
+#### `Response`       
+```json5
+{
+    "success" : true,
+    "deleted" : 1,
+    "questions": [
+                    { 
+                        "id" : 2,
+                        "question" : "What is testing",
+                        "answer" : "Software testing is an investigation conducted to provide information about the quality of the software product or service under test"
+                        "category": "Programming",
+                        "difficulty": 3
+                    } 
+                ]
+    "total_questions": 1,
+}
+```
 
-POST '/categories/<category_type>/questions'
+#### `POST /categories/<category_type>/questions`
+
 - Retrieve questions based on the Category Type variable
-- Fetches a list of dictionaries of paginated questions in which each question is an object with it's own values
+- Fetches a list of dictionaries of paginated questions in which each question is an object with it"s own values
 - Request Arguments : Category Type
 - Returns: a list of questions within that Category Type
 
+#### `Response`
+```json5
 {
-    'success' : True,
-    'questions': [
+    "success" : true,
+    "questions": [
                     { 
-                        'id' : 1,
-                        'question' : "What is testing",
-                        'answer' : "Software testing is an investigation conducted to provide information about the quality of the software product or service under test"
-                        'category': "Programming",
-                        'difficulty': 3
+                        "id" : 1,
+                        "question" : "What is testing",
+                        "answer" : "Software testing is an investigation conducted to provide information about the quality of the software product or service under test"
+                        "category": "Programming",
+                        "difficulty": 3
                     } 
                     { 
-                        'id' : 2,
-                        'question' : "What is testing",
-                        'answer' : "Software testing is an investigation conducted to provide information about the quality of the software product or service under test"
-                        'category': "Programming",
-                        'difficulty': 3
+                        "id" : 2,
+                        "question" : "What is testing",
+                        "answer" : "Software testing is an investigation conducted to provide information about the quality of the software product or service under test"
+                        "category": "Programming",
+                        "difficulty": 3
                     } 
                 ]
-    'total_questions': 2,
+    "total_questions": 2,
 }
+```
 
-POST '/play'
+#### `POST /play`
 
 - Fetches a question based on the category type
 - Request Arguments : None
 - Returns a random question within the selected category
 
+#### `Response`
+```json5
 {
-    'success' : True,
-    'questions': { 
-                    'id' : 1,
-                    'question' : "What is testing",
-                    'answer' : "Software testing is an investigation conducted to provide information about the quality of the software product or service under test"
-                    'category': "Programming",
-                    'difficulty': 3
+    "success" : true,
+    "questions": { 
+                    "id" : 1,
+                    "question" : "What is testing",
+                    "answer" : "Software testing is an investigation conducted to provide information about the quality of the software product or service under test"
+                    "category": "Programming",
+                    "difficulty": 3
                  } 
 }
-
-
 ```
 
-### Errors
-##### Supported Http Status Codes:
-- 200 : Request has been fulfilled
-- 201 : Entity has been created
-- 400 : Request missing parameter
-- 404 : Resource not found
-- 422 : Wrong info provided
-- 405 : Method not allowed
+
+## Status Codes
+- `200` : Request has been fulfilled
+- `201` : Entity has been created
+- `400` : Request missing parameter
+- `404` : Resource not found
+- `422` : Wrong info provided
+- `405` : Method not allowed
 
 ## Testing
 To run the tests, run
 ```
-dropdb trivia_test
 createdb trivia_test
+dropdb trivia_test
 psql trivia_test < trivia.psql
 python test_flaskr.py
 ```
